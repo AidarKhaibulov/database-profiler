@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CipherManager {
@@ -32,8 +33,8 @@ public class CipherManager {
             this.cipherAlgorithm = Integer.parseInt(args[1]);
             this.key = args[2];
             this.lastBlockZeros = Integer.parseInt(args[3]);
-            this.elementsType = Integer.parseInt(args[4]);
-            this.groupSize = Integer.parseInt(args[5]);
+            this.groupSize = Integer.parseInt(args[4]);
+            this.elementsType = Integer.parseInt(args[5]);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,9 +93,9 @@ public class CipherManager {
 
     private void addingZeros(char[] keys, String[] splitedText) {
         int lastBlockIndex = splitedText.length - 1;
-        if (splitedText[lastBlockIndex].length() < keys.length * elementsType) {
+        if (splitedText[lastBlockIndex].length() < keys.length * groupSize) {
             StringBuilder newBlock = new StringBuilder(splitedText[lastBlockIndex]);
-            newBlock.append("\0".repeat(Math.max(0, keys.length * elementsType - (splitedText[lastBlockIndex].length()))));
+            newBlock.append("\0".repeat(Math.max(0, keys.length * groupSize - (splitedText[lastBlockIndex].length()))));
             splitedText[lastBlockIndex] = String.valueOf(newBlock);
         }
     }
@@ -118,31 +119,30 @@ public class CipherManager {
     }
 
     public String applyCipherToString(String text) {
-        if(elementsType==2){//means we have text consisting of groups of bits
-
-        }
-        else
+        if (elementsType == 2) {// Means we have text consisting of groups of bits. So we have to apply our algorithm to each group of bits
+            String[] splitedBits = text.split("(?<=\\G.{" + 8 + "})");
+            for (int i = 0; i < splitedBits.length; i++) {
+                splitedBits[i]=applyPermutationToGroups(splitedBits[i]);
+            }
+            return Arrays.toString(splitedBits);
+        } else
             return applyPermutationToGroups(text);
-        return applyPermutationToGroups(text);
     }
 
     private String applyPermutationToGroups(String text) {
         //split our text into key size groups
         StringBuilder newString = new StringBuilder();
         char[] keys = key.toCharArray();
-        String[] splitedText = text.split("(?<=\\G.{" + key.length() * elementsType + "})");
+        String[] splitedText = text.split("(?<=\\G.{" + key.length() * groupSize + "})");
         int numberOfBlocks = splitedText.length;
 
         //zeros adding if needed
         addingZeros(keys, splitedText);
-        if (elementsType == 2) {
-
-        }
         int j = 0;//for counting last block
         for (String block : splitedText) {
-            String[] newBlock = new String[block.length() / elementsType];
-            for (int i = 0; i < block.length() / elementsType; i++)
-                newBlock[Integer.parseInt(String.valueOf(keys[i]))] = block.substring(i * elementsType, (i + 1) * elementsType);
+            String[] newBlock = new String[block.length() / groupSize];
+            for (int i = 0; i < block.length() / groupSize; i++)
+                newBlock[Integer.parseInt(String.valueOf(keys[i]))] = block.substring(i * groupSize, (i + 1) * groupSize);
             j++;
             //deleting zeros if needed
             deleteZeros(newString, numberOfBlocks, j, newBlock);

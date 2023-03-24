@@ -15,6 +15,7 @@ public class Main {
             System.out.println("Введите текстовое сообщение");
             //text = in.nextLine();
             text = "aabbccddppqq";
+            //text = "00110011001111110011000000101011";
             System.out.println("Введите id желаемой шифровки");
             //id = in.nextInt();
             in.nextLine();
