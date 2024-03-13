@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: spring
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
