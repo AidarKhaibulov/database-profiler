@@ -35,7 +35,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.DatabaseProfilerApplication">
+  <component name="RunManager" selected="JUnit.QueryExplainerServiceTest">
     <configuration name="DatabaseProfilerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ru.dbp.databaseprofiler.DatabaseProfilerApplication" />
       <module name="database-profiler" />
@@ -64,6 +64,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="QueryExplainerServiceTest.test01" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="database-profiler" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.dbp.databaseprofiler.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.dbp.databaseprofiler.services" />
+      <option name="MAIN_CLASS_NAME" value="ru.dbp.databaseprofiler.services.QueryExplainerServiceTest" />
+      <option name="METHOD_NAME" value="test01" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="Misc" />
       <method v="2">
@@ -79,8 +95,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.DatabaseProfilerApplication" />
         <item itemvalue="JUnit.QueryExplainerServiceTest" />
+        <item itemvalue="JUnit.QueryExplainerServiceTest.test01" />
+        <item itemvalue="Application.DatabaseProfilerApplication" />
       </list>
     </recent_temporary>
   </component>

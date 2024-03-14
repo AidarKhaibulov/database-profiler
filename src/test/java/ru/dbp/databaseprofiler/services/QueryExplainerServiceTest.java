@@ -13,8 +13,8 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
-@Profile("test")
 @SpringBootTest
+@Profile("test")
 class QueryExplainerServiceTest {
 
     @Autowired
