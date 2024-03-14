@@ -1,6 +1,7 @@
 package ru.dbp.databaseprofiler.services;
 
 import jakarta.persistence.EntityManager;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,11 @@ class QueryExplainerServiceTest {
     @BeforeAll
     static void beforeAll() {
         postgreSQLContainer.start();
+        Flyway flyway = Flyway.configure()
+                .dataSource(postgreSQLContainer.getJdbcUrl(), postgreSQLContainer.getUsername(), postgreSQLContainer.getPassword())
+                .locations("classpath:db/migration/postgres")
+                .load();
+        flyway.migrate();
     }
 
     @AfterAll
