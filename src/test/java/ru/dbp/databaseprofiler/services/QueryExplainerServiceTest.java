@@ -21,7 +21,6 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @SpringBootTest
 @Testcontainers
-@ActiveProfiles("test")
 class QueryExplainerServiceTest {
 
     @Container
