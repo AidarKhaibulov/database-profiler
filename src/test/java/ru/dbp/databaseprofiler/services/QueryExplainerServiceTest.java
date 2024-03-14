@@ -1,18 +1,12 @@
 package ru.dbp.databaseprofiler.services;
 
 import jakarta.persistence.EntityManager;
-import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.ActiveProfiles;
+import ru.dbp.databaseprofiler.BasePostgresContainerTest;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,37 +14,9 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)@Testcontainers
-class QueryExplainerServiceTest {
-    @LocalServerPort
-    private Integer port;
-
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-            "postgres:latest"
-    );
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
-
-
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-        Flyway flyway = Flyway.configure()
-                .dataSource(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword())
-                .locations("classpath:db/migration/postgres")
-                .load();
-        flyway.migrate();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.stop();
-    }
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class QueryExplainerServiceTest extends BasePostgresContainerTest {
 
     @Autowired
     private EntityManager entityManager;
