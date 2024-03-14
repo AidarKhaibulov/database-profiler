@@ -1,6 +1,8 @@
 package ru.dbp.databaseprofiler.services;
 
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,6 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
 @SpringBootTest
-@ActiveProfiles("test")
 @Testcontainers
 class QueryExplainerServiceTest {
 
@@ -27,6 +28,16 @@ class QueryExplainerServiceTest {
             .withDatabaseName("testdb")
             .withUsername("sa")
             .withPassword("password");
+
+    @BeforeAll
+    static void beforeAll() {
+        postgreSQLContainer.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgreSQLContainer.stop();
+    }
 
     @Autowired
     private EntityManager entityManager;
