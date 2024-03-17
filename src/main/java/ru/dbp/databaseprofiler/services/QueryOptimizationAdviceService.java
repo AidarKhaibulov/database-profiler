@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.dbp.databaseprofiler.exceptions.QueryExplainException;
 import ru.dbp.databaseprofiler.repositories.PgStatementRepository;
 
 import java.util.HashMap;
@@ -38,8 +39,9 @@ public class QueryOptimizationAdviceService {
         } else {
             try {
                 List<String> queryPlan = queryExplainer.explainQuery(s);
+
             }
-            catch (Exception e){
+            catch (QueryExplainException e){
                 log.error("Exception while fetching query plan");
             }
             return "No advice";

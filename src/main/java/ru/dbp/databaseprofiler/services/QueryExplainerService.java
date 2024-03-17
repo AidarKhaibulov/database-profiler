@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PGobject;
 import org.springframework.stereotype.Service;
+import ru.dbp.databaseprofiler.exceptions.QueryExplainException;
 import ru.dbp.databaseprofiler.utils.StringHelper;
 
 import java.util.*;
@@ -25,11 +26,15 @@ public class QueryExplainerService {
     private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
-    public List<String> explainQuery(String query) {
-        String queryWithParams = linkParamsToQueryIfRequired(query);
-        String fullQuery = "EXPLAIN VERBOSE " + queryWithParams;
-        Query explainQuery = entityManager.createNativeQuery(fullQuery);
-        return explainQuery.getResultList();
+    public List<String> explainQuery(String query) throws QueryExplainException{
+        try {
+            String queryWithParams = linkParamsToQueryIfRequired(query);
+            String fullQuery = "EXPLAIN VERBOSE " + queryWithParams;
+            Query explainQuery = entityManager.createNativeQuery(fullQuery);
+            return explainQuery.getResultList();
+        }catch (Exception e){
+            throw new QueryExplainException();
+        }
     }
 
     private String linkParamsToQueryIfRequired(String query) {
@@ -47,7 +52,7 @@ public class QueryExplainerService {
         return createQueryWithRealValues(query, hiddenValueRealValueMap);
     }
 
-    private static String createQueryWithRealValues(String query, HashMap<String, String> hiddenValueRealValueMap) {
+    private String createQueryWithRealValues(String query, HashMap<String, String> hiddenValueRealValueMap) {
         StringBuilder queryWithParams = new StringBuilder(query);
         int paramIndex = 1;
         for (Map.Entry<String, String> e : hiddenValueRealValueMap.entrySet()) {
@@ -67,7 +72,7 @@ public class QueryExplainerService {
         return queryWithParams.toString();
     }
 
-    private static void replaceRemainingParamsWithIntegerValues(StringBuilder queryWithParams) {
+    private void replaceRemainingParamsWithIntegerValues(StringBuilder queryWithParams) {
         Pattern pattern = Pattern.compile("\\$\\d+", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(queryWithParams);
 
